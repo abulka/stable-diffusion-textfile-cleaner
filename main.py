@@ -21,24 +21,24 @@ def create_two_sets(files):
     # create two sets of files
     set1_txt = set()
     set2_png = set()
-    replacements1 = 0
-    replacements2 = 0
+    parts_to_remove = [
+        '_RealESRGAN_x4plus',
+        '_GFPGANv1.3_RealESRGAN_x4plus',
+    ]
+    # sort parts_to_remove by length so that larget parts are removed first
+    parts_to_remove.sort(key=len, reverse=True)
     for file in files:
         if file.endswith('.txt'):
             set1_txt.add(file[:-4])
         elif file.endswith('.png'):
-            if '_GFPGANv1.3_RealESRGAN_x4plus.png' in file:
-                file = file.replace('_GFPGANv1.3_RealESRGAN_x4plus.png', '')
-                replacements1 += 1
-            if '_RealESRGAN_x4plus' in file:
-                file = file.replace('_RealESRGAN_x4plus', '')
-                replacements2 += 1
+            for part in parts_to_remove:
+                if part in file:
+                    file = file.replace(part, '')
             pathObj = Path(file)
             # remove extension
             filename_wo_ext = pathObj.with_suffix('')
             file = str(filename_wo_ext)
             set2_png.add(file)
-    print(replacements1, replacements2)
     return set1_txt, set2_png
 
 
