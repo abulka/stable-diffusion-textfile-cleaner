@@ -12,7 +12,7 @@ chosen_path = DIR  # user can override later
 def main(page: Page):
     page.title = "stable diffustion textfile cleaner"
 
-    def button_clicked(e):
+    def button_scan_clicked(e):
         global bad_txt_files
 
         lv.controls.clear()
@@ -33,7 +33,7 @@ def main(page: Page):
                              on_click=lambda _: file_picker.get_directory_path())
     txt1 = TextField(label="DIR", value=DIR, expand=True)
     btnScan = FilledTonalButton(
-        "Scan", icon=icons.FIND_IN_PAGE, on_click=button_clicked)
+        "Scan", icon=icons.FIND_IN_PAGE, on_click=button_scan_clicked)
     row = Row(spacing=0, controls=[
               btnPick,
               txt1,
@@ -53,6 +53,7 @@ def main(page: Page):
                 '/Volumes/Google Drive/', f"{os.path.expanduser('~')}/Google Drive/")
         txt1.value = chosen_path
         txt1.update()
+        button_scan_clicked(None)
 
     def buttonDelete_clicked(e):
         for file_path in bad_txt_files:
@@ -63,17 +64,16 @@ def main(page: Page):
                 # os.remove(file_path)
 
 
+    lv = ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
+    page.add(lv)
+
     btnDeleteOrphans = ElevatedButton("Delete Orphans", icon=icons.DELETE, on_click=buttonDelete_clicked, style=ButtonStyle(
         bgcolor={"focused": colors.RED_200, "": colors.RED_900},
     ))
-    # row = Row(spacing=0, controls=[
-    #           btnScan, btnDeleteOrphans], alignment="spaceEvenly")
-    # page.add(row)
-    page.add(btnDeleteOrphans)
-
-    lv = ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
-
-    page.add(lv)
+    row = Row(spacing=0, controls=[
+              btnDeleteOrphans
+        ], alignment="center")
+    page.add(row)
 
     file_picker = FilePicker(on_result=on_dialog_result)
     page.overlay.append(file_picker)
