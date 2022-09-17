@@ -1,6 +1,7 @@
 from time import sleep
 import flet
 from flet import ListView, Page, Text, TextField, FilledTonalButton, FilledButton, ElevatedButton, icons, colors, Row, ButtonStyle
+from flet import FilePicker, FilePickerResultEvent
 from main import list_files, create_two_sets, find_missing_files, add_txt_extension, DIR
 
 bad_txt_files = []
@@ -8,8 +9,20 @@ bad_txt_files = []
 def main(page: Page):
     page.title = "stable diffustion textfile cleaner"
 
+    btnPick = ElevatedButton("Choose DIR...",
+        on_click=lambda _: file_picker.get_directory_path())
     txt1 = TextField(label="DIR", value=DIR)
-    page.add(txt1)
+    row = Row(spacing=0, controls=[
+              btnPick, 
+              txt1], 
+        alignment="start")
+    page.add(row)
+
+    def on_dialog_result(e: FilePickerResultEvent):
+        print("Selected files:", e.files)
+        print("Selected file or directory:", e.path)
+        txt1.value = e.path
+        txt1.update()
 
     def buttonDelete_clicked(e):
         for file_path in bad_txt_files:
@@ -46,11 +59,10 @@ def main(page: Page):
 
     page.add(lv)
 
-    # for i in range(0, 60):
-    #     sleep(1)
-    #     lv.controls.append(Text(f"Line {count}"))
-    #     count += 1
-    #     page.update()
+    file_picker = FilePicker(on_result=on_dialog_result)
+    page.overlay.append(file_picker)
+    page.update()
+
 
 
 flet.app(target=main)
