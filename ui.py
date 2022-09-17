@@ -2,7 +2,7 @@ from time import sleep
 import os
 import flet
 from flet import ListView, Page, Text, TextField, FilledTonalButton, FilledButton, ElevatedButton, icons, colors, Row, ButtonStyle
-from flet import FilePicker, FilePickerResultEvent
+from flet import FilePicker, FilePickerResultEvent, padding, Container
 from main import list_files, create_two_sets, find_missing_files, add_txt_extension, DIR
 
 bad_txt_files = []
@@ -28,6 +28,9 @@ def main(page: Page):
         for line in bad_txt_files:
             lv.controls.append(Text(f"{line}"))
         lv.update()
+
+        txt2.value = len(bad_txt_files)
+        txt2.update()
 
     btnPick = ElevatedButton("Choose DIR...",
                              on_click=lambda _: file_picker.get_directory_path())
@@ -67,11 +70,15 @@ def main(page: Page):
     lv = ListView(expand=1, spacing=10, padding=20, auto_scroll=True)
     page.add(lv)
 
-    btnDeleteOrphans = ElevatedButton("Delete Orphans", icon=icons.DELETE, on_click=buttonDelete_clicked, style=ButtonStyle(
+    btnDeleteOrphans = ElevatedButton(f"Delete Orphans", icon=icons.DELETE, on_click=buttonDelete_clicked, style=ButtonStyle(
         bgcolor={"focused": colors.RED_200, "": colors.RED_900},
     ))
+    # text field displaying len(bad_txt_files)
+    txt2 = Text(value=len(bad_txt_files), expand=False)
+    container_4 = Container(content=txt2, padding=padding.only(left=10))
     row = Row(spacing=0, controls=[
-              btnDeleteOrphans
+              btnDeleteOrphans,
+              container_4,
         ], alignment="center")
     page.add(row)
 
