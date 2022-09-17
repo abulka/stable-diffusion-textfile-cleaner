@@ -3,6 +3,7 @@ import flet
 from flet import ListView, Page, Text, TextField, FilledTonalButton, FilledButton, ElevatedButton, icons, colors, Row, ButtonStyle
 from main import list_files, create_two_sets, find_missing_files, add_txt_extension, DIR
 
+bad_txt_files = []
 
 def main(page: Page):
     page.title = "stable diffustion textfile cleaner"
@@ -11,9 +12,13 @@ def main(page: Page):
     page.add(txt1)
 
     def buttonDelete_clicked(e):
-        print('delete clicked')
+        for file_path in bad_txt_files:
+            print('Would delete', file_path)
+            # os.remove(file_path)
 
     def button_clicked(e):
+        global bad_txt_files
+
         lv.controls.clear()
         result = list_files(txt1.value)
         set1_txt, set2_png = create_two_sets(result)
@@ -31,11 +36,6 @@ def main(page: Page):
     btnScan = FilledTonalButton(
         "Scan", icon=icons.FIND_IN_PAGE, on_click=button_clicked)
     btnDeleteOrphans = ElevatedButton("Delete Orphans", icon=icons.DELETE, on_click=buttonDelete_clicked, style=ButtonStyle(
-        # color={
-        #     "hovered": colors.WHITE,
-        #     "focused": colors.BLUE,
-        #     "": colors.BLACK,
-        # },
         bgcolor={"focused": colors.RED_200, "": colors.RED_900},
     ))
     row = Row(spacing=0, controls=[
