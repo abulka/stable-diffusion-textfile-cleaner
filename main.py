@@ -48,13 +48,13 @@ def find_missing_files(set1_txt, set2_png):
     return missing_files
 
 
-def add_txt_extension(missing_files):
+def add_txt_extension(missing_files, dir=DIR):
     # add .txt extension to missing files
     missing_files_txt = []
     for file in missing_files:
         txt_file = file + '.txt'
         # prepend DIR path to txt_file
-        txt_file = os.path.join(DIR, txt_file)
+        txt_file = os.path.join(dir, txt_file)
         missing_files_txt.append(txt_file)
     return missing_files_txt
 

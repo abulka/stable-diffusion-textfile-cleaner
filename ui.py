@@ -1,10 +1,12 @@
 from time import sleep
+import os
 import flet
 from flet import ListView, Page, Text, TextField, FilledTonalButton, FilledButton, ElevatedButton, icons, colors, Row, ButtonStyle
 from flet import FilePicker, FilePickerResultEvent
 from main import list_files, create_two_sets, find_missing_files, add_txt_extension, DIR
 
 bad_txt_files = []
+chosen_path = DIR  # user can override later
 
 def main(page: Page):
     page.title = "stable diffustion textfile cleaner"
@@ -19,15 +21,22 @@ def main(page: Page):
     page.add(row)
 
     def on_dialog_result(e: FilePickerResultEvent):
+        global chosen_path
         print("Selected files:", e.files)
         print("Selected file or directory:", e.path)
-        txt1.value = e.path
+        chosen_path = e.path
+        chosen_path = chosen_path.replace('\\', '')
+        if '/Volumes/Google Drive/' in chosen_path:
+            chosen_path = chosen_path.replace('/Volumes/Google Drive/', f"{os.path.expanduser('~')}/Google Drive/")
+        txt1.value = chosen_path
         txt1.update()
 
     def buttonDelete_clicked(e):
         for file_path in bad_txt_files:
             print('Would delete', file_path)
             # os.remove(file_path)
+            if not os.path.exists(file_path):
+                print('  File does not exist', file_path)
 
     def button_clicked(e):
         global bad_txt_files
@@ -39,7 +48,7 @@ def main(page: Page):
         print('png files', set2_png)
         missing_images = find_missing_files(set1_txt, set2_png)
         print('bad orphans', missing_images)
-        bad_txt_files = add_txt_extension(missing_images)
+        bad_txt_files = add_txt_extension(missing_images, dir=chosen_path)
         print(len(bad_txt_files), 'bad txt files')
 
         for line in bad_txt_files:
