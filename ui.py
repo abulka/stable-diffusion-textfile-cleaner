@@ -3,6 +3,7 @@ import os
 import flet
 from flet import ListView, Page, Text, TextField, FilledTonalButton, FilledButton, ElevatedButton, icons, colors, Row, ButtonStyle
 from flet import FilePicker, FilePickerResultEvent, padding, Container, ProgressRing, Column
+from flet import Page, KeyboardEvent
 from main import list_files, create_two_sets, find_missing_files, add_txt_extension, DIR
 from preferences import edit_preferences, set_page
 
@@ -121,6 +122,14 @@ def main(page: Page):
               row_prefs,
         ], alignment="center")
     page.add(row)
+
+    def on_keyboard (e: KeyboardEvent):
+        # keypressed = f"Key: {e.key}, Shift: {e.shift}, Control: {e.ctrl}, Alt: {e.alt}, Meta: {e.meta}"
+        # print (keypressed)
+        if e.key == ',' and e.meta:
+            edit_preferences(None)
+        
+    page.on_keyboard_event = on_keyboard
 
     page.update()
 
