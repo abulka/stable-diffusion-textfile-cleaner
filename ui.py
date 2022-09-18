@@ -4,7 +4,7 @@ import flet
 from flet import ListView, Page, Text, TextField, FilledTonalButton, FilledButton, ElevatedButton, icons, colors, Row, ButtonStyle
 from flet import FilePicker, FilePickerResultEvent, padding, Container, ProgressRing, Column
 from main import list_files, create_two_sets, find_missing_files, add_txt_extension, DIR
-from preferences import edit_preferences
+from preferences import edit_preferences, set_page
 
 bad_txt_files = []
 chosen_path = DIR  # user can override later
@@ -124,6 +124,6 @@ def main(page: Page):
 
     page.update()
 
-
+    set_page(page)
 
 flet.app(target=main)
