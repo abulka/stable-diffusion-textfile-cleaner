@@ -1,6 +1,7 @@
 import json
 import flet
 from flet import AlertDialog, ElevatedButton, Page, Text, TextButton, Column, Container, colors, TextField, icons, padding
+from flet import Checkbox
 
 page = None
 
@@ -52,14 +53,26 @@ def get_strings_to_strip():
         # return my_data list as string with newlines
         return '\n'.join(my_data)
 
+def get_favourite_directories():
+    return ''
 
 txt_field_strip = TextField(
     label="Strip these strings from png filenames",
     multiline=True,
     disabled=False,
-    max_lines=10,
+    max_lines=3,
     value=get_strings_to_strip(),
 )
+
+txt_field_favourite_dirs = TextField(
+    label="Favourite directory paths",
+    multiline=True,
+    disabled=False,
+    max_lines=3,
+    value=get_favourite_directories(),
+)
+
+cb_actually_delete = Checkbox(label="Actually delete files", value=False)
 
 dlg_modal = AlertDialog(
     modal=True,
@@ -67,6 +80,8 @@ dlg_modal = AlertDialog(
     content=Container(  # Trick dialog to be wider by using a fixed width container
         width=600,
         content=Column(controls=[
+            cb_actually_delete,
+            txt_field_favourite_dirs,
             txt_field_strip,
         ])),
     actions=[
