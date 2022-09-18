@@ -7,18 +7,27 @@ page = None
 def set_page(p):
     global page
     page = p
+    page.dialog = dlg_modal
 
 
 def edit_preferences(e):
     print('edit_preferences')
-    page.dialog = dlg_modal
+    txt_field_strip.value=get_strings_to_strip()
     dlg_modal.open = True
     page.update()
 
 
 def close_dlg(e):
+    print('close_dlg')
     dlg_modal.open = False
     page.update()
+
+
+def ok_dlg(e):
+    print('ok_dlg', txt_field_strip.value)
+    dlg_modal.open = False
+    page.update()
+
 
 def get_strings_to_strip():
     my_data = [
@@ -29,30 +38,25 @@ def get_strings_to_strip():
     return '\n'.join(my_data)
 
 
+txt_field_strip = TextField(
+    label="Strip these strings from png filenames",
+    multiline=True,
+    disabled=False,
+    max_lines=10,
+    value=get_strings_to_strip(),
+)
+
 dlg_modal = AlertDialog(
     modal=True,
     title=Text("Preferences"),
-    content=Column(controls=[
-        # Text("Do you really want to delete all those files?"),
-
-        TextField(
-            label="strip these strings from png filenames",
-            multiline=True,
-            disabled=False,
-            max_lines=10,
-            value=get_strings_to_strip(),
-        ),
-
-        # Trick dialog to be wider
-        Container(
-            bgcolor=colors.TRANSPARENT,
-            height=1,
-            width=500,
-        ),
-    ]),
+    content=Container(  # Trick dialog to be wider by using a fixed width container
+        width=600,
+        content=Column(controls=[
+            txt_field_strip,
+        ])),
     actions=[
-        TextButton("Yes", on_click=close_dlg),
-        TextButton("No", on_click=close_dlg),
+        TextButton("Ok", on_click=ok_dlg),
+        TextButton("Cancel", on_click=close_dlg),
     ],
     actions_alignment="end",
     on_dismiss=lambda e: print("Modal dialog dismissed!"),
