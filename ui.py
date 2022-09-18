@@ -10,7 +10,9 @@ chosen_path = DIR  # user can override later
 
 
 def main(page: Page):
-    page.title = "stable diffustion textfile cleaner"
+    page.title = "stable diffusion textfile cleaner"
+    page.window_width = 1200
+    page.window_center()
 
     def on_dialog_result(e: FilePickerResultEvent):
         global chosen_path
@@ -32,6 +34,7 @@ def main(page: Page):
         global bad_txt_files
 
         lv.controls.clear()
+        lv.auto_scroll = False
         result = list_files(txt1.value)
         set1_txt, set2_png = create_two_sets(result)
         print('text files', set1_txt)
@@ -42,10 +45,10 @@ def main(page: Page):
         print(len(bad_txt_files), 'bad txt files')
 
         for line in bad_txt_files:
-            lv.controls.append(Text(f"{line}"))
+            lv.controls.append(Text(f"{line}", size=12, font_family="Consolas", selectable=True))
         lv.update()
 
-        txt2.value = len(bad_txt_files)
+        txt2.value = num_orphans_calc()
         txt2.update()
 
     file_picker = FilePicker(on_result=on_dialog_result)
@@ -80,13 +83,27 @@ def main(page: Page):
     page.add(row)
 
     def buttonDelete_clicked(e):
+        lv.controls.clear()
+        lv.auto_scroll = True
+        num_left_to_delete = len(bad_txt_files)
         for file_path in bad_txt_files:
             if not os.path.exists(file_path):
                 print('  File does not exist', file_path)
             else:
-                print('Would delete', file_path)
+                deleted_msg = f"Deleted {file_path}"
+                print(deleted_msg)
                 # os.remove(file_path)
+                lv.controls.append(Text(deleted_msg, size=12, font_family="Consolas", color="red600", selectable=True))
+                num_left_to_delete -= 1
 
+                txt2.value = num_orphans_calc(num_left_to_delete)
+                txt2.update()
+            lv.update()
+
+    def num_orphans_calc(num=None):
+        if num is None:
+            num = len(bad_txt_files)
+        return f"{num} orphaned text files"
 
     lv = ListView(expand=1, spacing=10, padding=20, auto_scroll=False)
     page.add(lv)
@@ -94,8 +111,7 @@ def main(page: Page):
     btnDeleteOrphans = ElevatedButton(f"Delete Orphans", icon=icons.DELETE, on_click=buttonDelete_clicked, style=ButtonStyle(
         bgcolor={"focused": colors.RED_200, "": colors.RED_900},
     ))
-    # text field displaying len(bad_txt_files)
-    txt2 = Text(value=len(bad_txt_files), expand=False)
+    txt2 = Text(value=num_orphans_calc(), expand=False)
     container_4 = Container(content=txt2, padding=padding.only(left=10))
     row = Row(spacing=0, controls=[
               btnDeleteOrphans,
