@@ -1,3 +1,4 @@
+import json
 import flet
 from flet import AlertDialog, ElevatedButton, Page, Text, TextButton, Column, Container, colors, TextField, icons, padding
 
@@ -25,17 +26,31 @@ def close_dlg(e):
 
 def ok_dlg(e):
     print('ok_dlg', txt_field_strip.value)
+    data_persist = {
+        'description': 'preferences for stable diffusion textfile cleaner',
+        'version': 1,
+        'strings_to_strip': txt_field_strip.value,
+        'other': 'other stuff'
+    }
+    with open('prefs.json', 'w') as f:
+        json.dump(data_persist, f, indent=2)
+
     dlg_modal.open = False
     page.update()
 
 
 def get_strings_to_strip():
-    my_data = [
-        '_RealESRGAN_x4plus',
-        '_GFPGANv1.3_RealESRGAN_x4plus',
-    ]
-    # return my_data list as string with newlines
-    return '\n'.join(my_data)
+    try:
+        with open('prefs.json', 'r') as f:
+            data = json.load(f)
+            return data['strings_to_strip']
+    except:
+        my_data = [
+            '_RealESRGAN_x4plus',
+            '_GFPGANv1.3_RealESRGAN_x4plus',
+        ]
+        # return my_data list as string with newlines
+        return '\n'.join(my_data)
 
 
 txt_field_strip = TextField(
