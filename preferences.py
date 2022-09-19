@@ -40,6 +40,10 @@ def model_get_last_favourite_dir():
     model = get_model()
     return model['favourite_directories'][0] if len(model['favourite_directories']) > 0 else ''
 
+def model_get_last_favourites():
+    model = get_model()
+    return model['favourite_directories']
+
 # ------------------------------- Private -------------------------------
 
 default_model = {

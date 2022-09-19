@@ -3,9 +3,9 @@ import os
 import flet
 from flet import ListView, Page, Text, TextField, FilledTonalButton, FilledButton, ElevatedButton, icons, colors, Row, ButtonStyle
 from flet import FilePicker, FilePickerResultEvent, padding, Container, ProgressRing, Column
-from flet import Page, KeyboardEvent
+from flet import Page, KeyboardEvent, Dropdown, dropdown
 from main import list_files, create_two_sets, find_missing_files, add_dir_root_and_txt_extension
-from preferences import edit_preferences, set_page, model_add_favourite_path, model_get_last_favourite_dir
+from preferences import edit_preferences, set_page, model_add_favourite_path, model_get_last_favourite_dir, model_get_last_favourites
 
 bad_txt_files = []
 chosen_path = None  # user will override later
@@ -50,12 +50,15 @@ def main(page: Page):
         print('bad orphans', missing_images)
         print('chosen_path', chosen_path)
         if not chosen_path:
-            raise Exception('no path chosen - probably an initialisation error')
-        bad_txt_files = add_dir_root_and_txt_extension(missing_images, dir=chosen_path)
+            raise Exception(
+                'no path chosen - probably an initialisation error')
+        bad_txt_files = add_dir_root_and_txt_extension(
+            missing_images, dir=chosen_path)
         print(len(bad_txt_files), 'bad txt files')
 
         for line in bad_txt_files:
-            lv.controls.append(Text(f"{line}", size=12, font_family="Consolas", selectable=True))
+            lv.controls.append(
+                Text(f"{line}", size=12, font_family="Consolas", selectable=True))
         lv.update()
 
         txt2.value = num_orphans_calc()
@@ -76,18 +79,30 @@ def main(page: Page):
         pr.visible = False
         page.update()
 
-
     btnPick = ElevatedButton("Choose DIR...",
-                            #  on_click=lambda _: file_picker.get_directory_path())
+                             #  on_click=lambda _: file_picker.get_directory_path())
                              on_click=pick_directory)
     last_favourite_dir = chosen_path = model_get_last_favourite_dir()
     txt1 = TextField(label="DIR", value=last_favourite_dir, expand=True)
+
+    dd = Dropdown(
+        width=100,
+        options=[
+            dropdown.Option("Red"),
+            dropdown.Option("Green"),
+            dropdown.Option("Blue"),
+        ],
+    )
+    for fav in model_get_last_favourites():
+        dd.options.append(dropdown.Option(fav))
+
     btnScan = FilledTonalButton(
         "Scan", icon=icons.FIND_IN_PAGE, on_click=button_scan_clicked)
     row = Row(spacing=0, controls=[
               btnPick,
               pr,
               txt1,
+              # dd, # if want to display dropdown
               btnScan
               ],
               alignment="start")
@@ -104,7 +119,8 @@ def main(page: Page):
                 deleted_msg = f"Deleted {file_path}"
                 print(deleted_msg)
                 # os.remove(file_path)
-                lv.controls.append(Text(deleted_msg, size=12, font_family="Consolas", color="red600", selectable=True))
+                lv.controls.append(Text(
+                    deleted_msg, size=12, font_family="Consolas", color="red600", selectable=True))
                 num_left_to_delete -= 1
 
                 txt2.value = num_orphans_calc(num_left_to_delete)
@@ -124,24 +140,26 @@ def main(page: Page):
     ))
     txt2 = Text(value=num_orphans_calc(), expand=False)
     container_4 = Container(content=txt2, padding=padding.only(left=10))
-    row_prefs = Row(spacing=0, alignment="end", expand=True, controls=[ElevatedButton("Preferences...", icon=icons.SETTINGS, on_click=edit_preferences)])
+    row_prefs = Row(spacing=0, alignment="end", expand=True, controls=[
+                    ElevatedButton("Preferences...", icon=icons.SETTINGS, on_click=edit_preferences)])
     row = Row(spacing=0, controls=[
               btnDeleteOrphans,
               container_4,
               row_prefs,
-        ], alignment="center")
+              ], alignment="center")
     page.add(row)
 
-    def on_keyboard (e: KeyboardEvent):
+    def on_keyboard(e: KeyboardEvent):
         # keypressed = f"Key: {e.key}, Shift: {e.shift}, Control: {e.ctrl}, Alt: {e.alt}, Meta: {e.meta}"
         # print (keypressed)
         if e.key == ',' and e.meta:
             edit_preferences(None)
-        
+
     page.on_keyboard_event = on_keyboard
 
     page.update()
 
     set_page(page)
+
 
 flet.app(target=main)
