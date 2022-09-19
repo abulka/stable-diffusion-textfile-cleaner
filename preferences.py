@@ -2,6 +2,7 @@ import json
 import flet
 from flet import AlertDialog, ElevatedButton, Page, Text, TextButton, Column, Container, colors, TextField, icons, padding
 from flet import Checkbox
+from main import DIR
 
 page = None
 
@@ -21,6 +22,27 @@ def edit_preferences(e):
     dlg_modal.open = True
     page.update()
 
+def get_model():
+    try:
+        with open('prefs.json', 'r') as f:
+            data = json.load(f)
+    except:
+        data = default_model.copy()
+    return data
+
+def model_add_favourite_path(path):
+    model = get_model()
+    if path not in model['favourite_directories']:
+        model['favourite_directories'].append(path)
+    with open('prefs.json', 'w') as f:
+        json.dump(model, f, indent=2)
+
+def model_get_last_favourite_dir():
+    model = get_model()
+    return model['favourite_directories'][0] if len(model['favourite_directories']) > 0 else DIR
+
+# ------------------------------- Private -------------------------------
+
 default_model = {
     'description': 'preferences for stable diffusion textfile cleaner',
     'version': 1,
@@ -32,16 +54,6 @@ default_model = {
     'actually_delete': False,
     'other': 'other stuff'
 }
-
-def get_model():
-    try:
-        with open('prefs.json', 'r') as f:
-            data = json.load(f)
-    except:
-        data = default_model.copy()
-    return data
-
-# ------------------------------- Private -------------------------------
 
 def close_dlg(e):
     print('close_dlg')
