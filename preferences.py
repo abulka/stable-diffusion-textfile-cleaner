@@ -1,7 +1,6 @@
-import json
-import flet
 from flet import AlertDialog, ElevatedButton, Page, Text, TextButton, Column, Container, colors, TextField, icons, padding
 from flet import Checkbox
+from model import get_model, save_model
 
 page = None
 
@@ -9,7 +8,7 @@ page = None
 def set_page(p):
     global page
     page = p
-    page.dialog = dlg_modal
+    print('set_page (prefs)', page)
 
 
 def edit_preferences(e):
@@ -18,23 +17,15 @@ def edit_preferences(e):
     txt_field_strip.value="\n".join(model['strings_to_strip'])
     txt_field_favourite_dirs.value="\n".join(model['favourite_directories'])
     cb_actually_delete.value = model['actually_delete'] if 'actually_delete' in model else False
+    page.dialog = dlg_modal
     dlg_modal.open = True
     page.update()
-
-def get_model():
-    try:
-        with open('prefs.json', 'r') as f:
-            data = json.load(f)
-    except:
-        data = default_model.copy()
-    return data
 
 def model_add_favourite_path(path):
     model = get_model()
     if path not in model['favourite_directories']:
         model['favourite_directories'].append(path)
-    with open('prefs.json', 'w') as f:
-        json.dump(model, f, indent=2)
+    save_model(model)
 
 def model_get_last_favourite_dir():
     model = get_model()
@@ -45,18 +36,6 @@ def model_get_last_favourites():
     return model['favourite_directories']
 
 # ------------------------------- Private -------------------------------
-
-default_model = {
-    'description': 'preferences for stable diffusion textfile cleaner',
-    'version': 1,
-    'strings_to_strip': [
-        '_RealESRGAN_x4plus',
-        '_GFPGANv1.3_RealESRGAN_x4plus',
-    ],
-    'favourite_directories': [],
-    'actually_delete': False,
-    'other': 'other stuff'
-}
 
 def close_dlg(e):
     print('close_dlg')
@@ -70,8 +49,7 @@ def ok_dlg(e):
     model['strings_to_strip'] = txt_field_strip.value.splitlines()
     model['favourite_directories'] = txt_field_favourite_dirs.value.splitlines()
     model['actually_delete'] = cb_actually_delete.value
-    with open('prefs.json', 'w') as f:
-        json.dump(model, f, indent=2)
+    save_model(model)
     dlg_modal.open = False
     page.update()
 

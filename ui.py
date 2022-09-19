@@ -5,7 +5,9 @@ from flet import ListView, Page, Text, TextField, FilledTonalButton, FilledButto
 from flet import FilePicker, FilePickerResultEvent, padding, Container, ProgressRing, Column
 from flet import Page, KeyboardEvent, Dropdown, dropdown
 from main import list_files, create_two_sets, find_missing_files, add_dir_root_and_txt_extension
-from preferences import edit_preferences, set_page, model_add_favourite_path, model_get_last_favourite_dir, model_get_last_favourites
+import preferences, choose_favourites
+from preferences import edit_preferences, model_add_favourite_path, model_get_last_favourite_dir, model_get_last_favourites
+from choose_favourites import choose_favourite
 
 bad_txt_files = []
 chosen_path = None  # user will override later
@@ -82,6 +84,8 @@ def main(page: Page):
     btnPick = ElevatedButton("Choose DIR...",
                              #  on_click=lambda _: file_picker.get_directory_path())
                              on_click=pick_directory)
+    btnPickFav = ElevatedButton("Choose Fav...",
+                              on_click=lambda _: choose_favourite(None))
     last_favourite_dir = chosen_path = model_get_last_favourite_dir()
     txt1 = TextField(label="DIR", value=last_favourite_dir, expand=True)
 
@@ -100,6 +104,7 @@ def main(page: Page):
         "Scan", icon=icons.FIND_IN_PAGE, on_click=button_scan_clicked)
     row = Row(spacing=0, controls=[
               btnPick,
+              btnPickFav,
               pr,
               txt1,
               # dd, # if want to display dropdown
@@ -159,7 +164,8 @@ def main(page: Page):
 
     page.update()
 
-    set_page(page)
+    preferences.set_page(page)
+    choose_favourites.set_page(page)
 
 
 flet.app(target=main)
