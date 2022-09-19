@@ -14,10 +14,34 @@ def set_page(p):
 
 def edit_preferences(e):
     print('edit_preferences')
-    txt_field_strip.value=get_strings_to_strip()
+    model = get_model()
+    txt_field_strip.value="\n".join(model['strings_to_strip'])
+    txt_field_favourite_dirs.value="\n".join(model['favourite_directories'])
+    cb_actually_delete.value = model['actually_delete'] if 'actually_delete' in model else False
     dlg_modal.open = True
     page.update()
 
+default_model = {
+    'description': 'preferences for stable diffusion textfile cleaner',
+    'version': 1,
+    'strings_to_strip': [
+        '_RealESRGAN_x4plus',
+        '_GFPGANv1.3_RealESRGAN_x4plus',
+    ],
+    'favourite_directories': [],
+    'actually_delete': False,
+    'other': 'other stuff'
+}
+
+def get_model():
+    try:
+        with open('prefs.json', 'r') as f:
+            data = json.load(f)
+    except:
+        data = default_model.copy()
+    return data
+
+# ------------------------------- Private -------------------------------
 
 def close_dlg(e):
     print('close_dlg')
@@ -27,41 +51,22 @@ def close_dlg(e):
 
 def ok_dlg(e):
     print('ok_dlg', txt_field_strip.value)
-    data_persist = {
-        'description': 'preferences for stable diffusion textfile cleaner',
-        'version': 1,
-        'strings_to_strip': txt_field_strip.value,
-        'other': 'other stuff'
-    }
+    model = get_model()
+    model['strings_to_strip'] = txt_field_strip.value.splitlines()
+    model['favourite_directories'] = txt_field_favourite_dirs.value.splitlines()
+    model['actually_delete'] = cb_actually_delete.value
     with open('prefs.json', 'w') as f:
-        json.dump(data_persist, f, indent=2)
-
+        json.dump(model, f, indent=2)
     dlg_modal.open = False
     page.update()
 
-
-def get_strings_to_strip():
-    try:
-        with open('prefs.json', 'r') as f:
-            data = json.load(f)
-            return data['strings_to_strip']
-    except:
-        my_data = [
-            '_RealESRGAN_x4plus',
-            '_GFPGANv1.3_RealESRGAN_x4plus',
-        ]
-        # return my_data list as string with newlines
-        return '\n'.join(my_data)
-
-def get_favourite_directories():
-    return ''
 
 txt_field_strip = TextField(
     label="Strip these strings from png filenames",
     multiline=True,
     disabled=False,
     max_lines=3,
-    value=get_strings_to_strip(),
+    value="",  # fill this in later
 )
 
 txt_field_favourite_dirs = TextField(
@@ -69,7 +74,7 @@ txt_field_favourite_dirs = TextField(
     multiline=True,
     disabled=False,
     max_lines=3,
-    value=get_favourite_directories(),
+    value="",  # fill this in later
 )
 
 cb_actually_delete = Checkbox(label="Actually delete files", value=False)
