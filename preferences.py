@@ -2,7 +2,6 @@ import json
 import flet
 from flet import AlertDialog, ElevatedButton, Page, Text, TextButton, Column, Container, colors, TextField, icons, padding
 from flet import Checkbox
-from main import DIR
 
 page = None
 
@@ -39,7 +38,7 @@ def model_add_favourite_path(path):
 
 def model_get_last_favourite_dir():
     model = get_model()
-    return model['favourite_directories'][0] if len(model['favourite_directories']) > 0 else DIR
+    return model['favourite_directories'][0] if len(model['favourite_directories']) > 0 else ''
 
 # ------------------------------- Private -------------------------------
 
