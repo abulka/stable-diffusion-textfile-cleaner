@@ -1,6 +1,6 @@
 import json
 import flet
-from flet import AlertDialog, ElevatedButton, Page, Text, TextButton, Column, Container, colors, TextField, icons, padding, ListView
+from flet import AlertDialog, ElevatedButton, Page, Text, TextButton, Column, Container, colors, TextField, icons, padding, ListView, Row
 from flet import Checkbox, ButtonStyle
 from flet.border import BorderSide
 from flet.buttons import RoundedRectangleBorder
@@ -44,7 +44,12 @@ def choose_favourite(e):
     for line in model['favourite_directories']:
         lv.controls.append(
             # Text(f"{line}", size=12, font_family="Consolas", selectable=False))
-            TextButton(text=f"{line}", on_click=chose),
+            # TextButton(text=f"{line}", on_click=chose),
+            ElevatedButton(
+                content=Row([Text(f"{line}")], alignment="start"),
+                width=100,
+                on_click=chose
+            )            
         )
     # lv.update()
 
@@ -54,7 +59,8 @@ def choose_favourite(e):
 
 
 def chose(e):
-    print('chose', e.control.text)
+    # print('chose', e.control.text)
+    print('chose', e.control.content.controls[0].value)
     dlg_modal.open = False
     page.update()
     
