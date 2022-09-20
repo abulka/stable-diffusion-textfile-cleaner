@@ -15,9 +15,6 @@ bad_txt_files = []
 chosen_path = None  # user will override later
 
 
-@smokesignal.on('chose_dir')
-def listener_chose_dir(arg):
-    print('listener_chose_dir', arg)
 
 
 def main(page: Page):
@@ -26,6 +23,16 @@ def main(page: Page):
     page.title = "stable diffusion textfile cleaner"
     page.window_width = 1200
     page.window_center()
+
+    @smokesignal.on('chose_dir')
+    def listener_chose_dir(arg):
+        print('listener_chose_dir', arg)
+        chosen_path = arg['path']
+        txt1.value = chosen_path
+        txt1.update()
+        model_add_favourite_path(chosen_path)
+        print('chosen_path AFTER dir selection', chosen_path)
+        button_scan_clicked(None)
 
     def on_dialog_result(e: FilePickerResultEvent):
         global chosen_path
@@ -39,11 +46,13 @@ def main(page: Page):
         if '/Volumes/Google Drive/' in chosen_path:
             chosen_path = chosen_path.replace(
                 '/Volumes/Google Drive/', f"{os.path.expanduser('~')}/Google Drive/")
-        txt1.value = chosen_path
-        txt1.update()
-        model_add_favourite_path(chosen_path)
-        print('chosen_path AFTER dir selection', chosen_path)
-        button_scan_clicked(None)
+        listener_chose_dir({'path': chosen_path,
+                                 'news': 'Sold for $1M'})
+        # txt1.value = chosen_path
+        # txt1.update()
+        # model_add_favourite_path(chosen_path)
+        # print('chosen_path AFTER dir selection', chosen_path)
+        # button_scan_clicked(None)
 
     def button_scan_clicked(e):
         global bad_txt_files, chosen_path
