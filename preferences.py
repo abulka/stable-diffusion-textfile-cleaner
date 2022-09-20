@@ -8,8 +8,6 @@ page = None
 def set_page(p):
     global page
     page = p
-    print('set_page (prefs)', page)
-
 
 def edit_preferences(e):
     print('edit_preferences')

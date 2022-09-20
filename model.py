@@ -1,5 +1,6 @@
 import json
 from freactive import autoproperty
+import smokesignal
 
 default_model = {
     'description': 'preferences for stable diffusion textfile cleaner',
@@ -34,6 +35,10 @@ def model_set_initial_directory(value):
     model = get_model()
     model['initial_directory'] = value
     save_model(model)
+    print('BROADCASTING....')
+    smokesignal.emit('chose_dir', arg={'path': value,
+                                 'news': 'Sold for $1M'})
+
 
 def model_get_initial_directory():
     model = get_model()
@@ -42,15 +47,18 @@ def model_get_initial_directory():
 
 # Possibly in future
 
-"""
-# Define the model
+if __name__ == '__main__':
 
-@autoproperty('counter', default_value=100, callback=update_counter_ui)
-@autoproperty('weather', default_value='sunny', callback=update_weather_ui)
-class Model:
-    pass
+    def update_counter_ui(arg1, arg2=None):
+        print('update_counter_ui', arg2)
 
-model = Model()
-model.boot()  # causes all observing callbacks to be called, which updates the UI with the initial state of the model
+    # Define the model
 
-"""
+    @autoproperty('counter', default_value=100, callback=update_counter_ui)
+    @autoproperty('weather', default_value='sunny', callback=None)
+    class Model:
+        pass
+
+    model = Model()
+    model.boot()  # causes all observing callbacks to be called, which updates the UI with the initial state of the model
+

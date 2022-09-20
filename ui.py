@@ -9,9 +9,15 @@ import preferences, choose_favourites
 from preferences import edit_preferences, model_add_favourite_path, model_get_last_favourite_dir, model_get_last_favourites
 from choose_favourites import choose_favourite
 from model import model_get_initial_directory
+import smokesignal
 
 bad_txt_files = []
 chosen_path = None  # user will override later
+
+
+@smokesignal.on('chose_dir')
+def listener_chose_dir(arg):
+    print('listener_chose_dir', arg)
 
 
 def main(page: Page):

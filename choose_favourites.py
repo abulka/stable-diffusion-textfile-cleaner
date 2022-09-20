@@ -12,8 +12,6 @@ page = None
 def set_page(p):
     global page
     page = p
-    print('set_page (choose fav)', page)
-
 
 def choose_favourite(e):
     model = get_model()
