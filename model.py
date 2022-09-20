@@ -9,6 +9,7 @@ default_model = {
         '_GFPGANv1.3_RealESRGAN_x4plus',
     ],
     'favourite_directories': [],
+    'initial_directory': '',
     'actually_delete': False,
     'other': 'other stuff'
 }
@@ -25,6 +26,18 @@ def get_model():
 def save_model(model):
     with open('prefs.json', 'w') as f:
         json.dump(model, f, indent=2)
+
+
+# Access
+
+def model_set_initial_directory(value):
+    model = get_model()
+    model['initial_directory'] = value
+    save_model(model)
+
+def model_get_initial_directory():
+    model = get_model()
+    return model['initial_directory'] if 'initial_directory' in model else ''
 
 
 # Possibly in future

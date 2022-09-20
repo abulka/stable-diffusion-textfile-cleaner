@@ -8,6 +8,7 @@ from main import list_files, create_two_sets, find_missing_files, add_dir_root_a
 import preferences, choose_favourites
 from preferences import edit_preferences, model_add_favourite_path, model_get_last_favourite_dir, model_get_last_favourites
 from choose_favourites import choose_favourite
+from model import model_get_initial_directory
 
 bad_txt_files = []
 chosen_path = None  # user will override later
@@ -75,7 +76,7 @@ def main(page: Page):
         pr.visible = True
         page.update()
 
-        # file_picker.initial_directory = model_get_last_favourite_dir()
+        file_picker.initial_directory = model_get_initial_directory()
         file_picker.get_directory_path()
         sleep(3)
 

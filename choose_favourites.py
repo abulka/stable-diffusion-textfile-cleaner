@@ -4,7 +4,7 @@ from flet import AlertDialog, ElevatedButton, Page, Text, TextButton, Column, Co
 from flet import Checkbox, ButtonStyle
 from flet.border import BorderSide
 from flet.buttons import RoundedRectangleBorder
-from model import get_model
+from model import get_model, model_set_initial_directory, model_get_initial_directory
 
 page = None
 
@@ -60,7 +60,9 @@ def choose_favourite(e):
 
 def chose(e):
     # print('chose', e.control.text)
-    print('chose', e.control.content.controls[0].value)
+    value = e.control.content.controls[0].value
+    print('chose', value)
+    model_set_initial_directory(value)
     dlg_modal.open = False
     page.update()
     
