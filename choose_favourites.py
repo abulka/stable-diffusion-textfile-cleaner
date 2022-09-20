@@ -46,7 +46,8 @@ def choose_favourite(e):
             ElevatedButton(
                 content=Row([Text(f"{line}")], alignment="start"),
                 width=100,
-                on_click=chose
+                on_click=chose,
+                data=line  # easier communication with button handler
             )            
         )
     # lv.update()
@@ -58,7 +59,8 @@ def choose_favourite(e):
 
 def chose(e):
     # print('chose', e.control.text)
-    value = e.control.content.controls[0].value
+    # value = e.control.content.controls[0].value
+    value = e.control.data  # easier communication with button handler via 'data' attribute
     print('chose', value)
     model_set_initial_directory(value)
     dlg_modal.open = False
