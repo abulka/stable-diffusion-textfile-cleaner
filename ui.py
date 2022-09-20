@@ -75,6 +75,7 @@ def main(page: Page):
         pr.visible = True
         page.update()
 
+        # file_picker.initial_directory = model_get_last_favourite_dir()
         file_picker.get_directory_path()
         sleep(3)
 
