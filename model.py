@@ -1,7 +1,13 @@
 import json
 from freactive import autoproperty
-import smokesignal
+# import smokesignal
 
+page = None
+
+def set_page(p):
+    global page
+    page = p
+    
 default_model = {
     'description': 'preferences for stable diffusion textfile cleaner',
     'version': 1,
@@ -36,9 +42,9 @@ def model_set_initial_directory(value):
     model['initial_directory'] = value
     save_model(model)
     print('BROADCASTING....')
-    smokesignal.emit('chose_dir', arg={'path': value,
-                                 'news': 'Sold for $1M'})
-
+    # smokesignal.emit('chose_dir', arg={'path': value,
+    #                              'news': 'Sold for $1M'})
+    page.pubsub.send_all_on_topic('chose_dir', {'path': value, })
 
 def model_get_initial_directory():
     model = get_model()

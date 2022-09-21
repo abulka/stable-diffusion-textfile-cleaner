@@ -8,8 +8,9 @@ from main import list_files, create_two_sets, find_missing_files, add_dir_root_a
 import preferences, choose_favourites
 from preferences import edit_preferences, model_add_favourite_path, model_get_last_favourite_dir, model_get_last_favourites
 from choose_favourites import choose_favourite
+import model
 from model import model_get_initial_directory
-import smokesignal
+# import smokesignal
 
 bad_txt_files = []
 chosen_path = None  # user will override later
@@ -24,8 +25,9 @@ def main(page: Page):
     page.window_width = 1200
     page.window_center()
 
-    @smokesignal.on('chose_dir')
-    def listener_chose_dir(arg):
+    # @smokesignal.on('chose_dir')
+    # def listener_chose_dir(arg):
+    def listener_chose_dir(topic, arg):
         print('listener_chose_dir', arg)
         chosen_path = arg['path']
         txt1.value = chosen_path
@@ -33,6 +35,8 @@ def main(page: Page):
         model_add_favourite_path(chosen_path)
         print('chosen_path AFTER dir selection', chosen_path)
         button_scan_clicked(None)
+
+    page.pubsub.subscribe_topic("chose_dir", listener_chose_dir)
 
     def on_dialog_result(e: FilePickerResultEvent):
         global chosen_path
@@ -183,6 +187,7 @@ def main(page: Page):
 
     preferences.set_page(page)
     choose_favourites.set_page(page)
+    model.set_page(page)
 
 
 flet.app(target=main)
