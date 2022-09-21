@@ -4,9 +4,9 @@ from freactive import autoproperty
 
 page = None
 
-def set_page(p):
-    global page
-    page = p
+# def set_page(p):
+#     global page
+#     page = p
     
 default_model = {
     'description': 'preferences for stable diffusion textfile cleaner',

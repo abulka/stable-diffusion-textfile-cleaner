@@ -1,13 +1,14 @@
 from flet import AlertDialog, ElevatedButton, Page, Text, TextButton, Column, Container, colors, TextField, icons, padding
 from flet import Checkbox
-from model import get_model, save_model
+import settings
+from settings import get_model, save_model
 
-page = None
+# page = None
 
 
-def set_page(p):
-    global page
-    page = p
+# def set_page(p):
+#     global page
+#     page = p
 
 def edit_preferences(e):
     print('edit_preferences')
@@ -15,9 +16,9 @@ def edit_preferences(e):
     txt_field_strip.value="\n".join(model['strings_to_strip'])
     txt_field_favourite_dirs.value="\n".join(model['favourite_directories'])
     cb_actually_delete.value = model['actually_delete'] if 'actually_delete' in model else False
-    page.dialog = dlg_modal
+    settings.page.dialog = dlg_modal
     dlg_modal.open = True
-    page.update()
+    settings.page.update()
 
 def model_add_favourite_path(path):
     model = get_model()
@@ -38,7 +39,7 @@ def model_get_last_favourites():
 def close_dlg(e):
     print('close_dlg')
     dlg_modal.open = False
-    page.update()
+    settings.page.update()
 
 
 def ok_dlg(e):
@@ -49,7 +50,7 @@ def ok_dlg(e):
     model['actually_delete'] = cb_actually_delete.value
     save_model(model)
     dlg_modal.open = False
-    page.update()
+    settings.page.update()
 
 
 txt_field_strip = TextField(

@@ -8,17 +8,17 @@ from main import list_files, create_two_sets, find_missing_files, add_dir_root_a
 import preferences, choose_favourites
 from preferences import edit_preferences, model_add_favourite_path, model_get_last_favourite_dir, model_get_last_favourites
 from choose_favourites import choose_favourite
-import model
-from model import model_get_initial_directory
+import settings
+from settings import model_get_initial_directory
 # import smokesignal
 
+# these should probably be in the model
 bad_txt_files = []
 chosen_path = None  # user will override later
 
-
-
-
 def main(page: Page):
+    settings.page = page
+
     global chosen_path
 
     page.title = "stable diffusion textfile cleaner"
@@ -185,9 +185,8 @@ def main(page: Page):
 
     page.update()
 
-    preferences.set_page(page)
-    choose_favourites.set_page(page)
-    model.set_page(page)
+    # preferences.set_page(page)
+    # choose_favourites.set_page(page)
 
 
 flet.app(target=main)

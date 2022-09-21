@@ -4,14 +4,15 @@ from flet import AlertDialog, ElevatedButton, Page, Text, TextButton, Column, Co
 from flet import Checkbox, ButtonStyle
 from flet.border import BorderSide
 from flet.buttons import RoundedRectangleBorder
-from model import get_model, model_set_initial_directory, model_get_initial_directory
+import settings
+from settings import get_model, model_set_initial_directory, model_get_initial_directory
 
-page = None
+# page = None
 
 
-def set_page(p):
-    global page
-    page = p
+# def set_page(p):
+#     global page
+#     page = p
 
 def choose_favourite(e):
     model = get_model()
@@ -52,9 +53,9 @@ def choose_favourite(e):
         )
     # lv.update()
 
-    page.dialog = dlg_modal
+    settings.page.dialog = dlg_modal
     dlg_modal.open = True
-    page.update()
+    settings.page.update()
 
 
 def chose(e):
@@ -64,19 +65,19 @@ def chose(e):
     print('chose', value)
     model_set_initial_directory(value)
     dlg_modal.open = False
-    page.update()
+    settings.page.update()
     
 def close_dlg(e):
     print('close_dlg')
     dlg_modal.open = False
-    page.update()
+    settings.page.update()
 
 
 # def ok_dlg(e):
 #     print('ok_dlg', e)
 #     # TODO get selected item in listview
 #     dlg_modal.open = False
-#     page.update()
+#     settings.page.update()
 
 
 # txt_field_favourite_dirs = TextField(
