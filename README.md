@@ -30,6 +30,11 @@ When upscaling images, the `txt` files and the `png` files will have different n
 
 You can edit the suffixes that will be accounted for in the 'ignore suffixes' box.  TODO.
 
+# TODO
+
+- Image browser.  Shows preview of images as well as the prompt text, retrieved from the `.txt` file.
+- Fix all the state stuff.
+
 # License
 
 MIT
