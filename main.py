@@ -10,6 +10,19 @@ def list_files(directory):
             files.append(file)
     return files
 
+def list_png(directory):
+    files = []
+    # list all .png files
+    for file in os.listdir(directory):
+        if file.endswith('.png'):
+            files.append(file)
+    return files
+
+    for file in os.listdir(directory):
+        if os.path.isfile(os.path.join(directory, file)):
+            files.append(file)
+    return files
+
 
 def create_two_sets(files):
     # create two sets of files

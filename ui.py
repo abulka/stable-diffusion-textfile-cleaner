@@ -4,7 +4,7 @@ import flet
 from flet import ListView, Page, Text, TextField, FilledTonalButton, FilledButton, ElevatedButton, icons, colors, Row, ButtonStyle
 from flet import FilePicker, FilePickerResultEvent, padding, Container, ProgressRing, Column
 from flet import Page, KeyboardEvent, Dropdown, dropdown
-from main import list_files, create_two_sets, find_missing_files, add_dir_root_and_txt_extension
+from main import list_files, list_png, create_two_sets, find_missing_files, add_dir_root_and_txt_extension
 import preferences, choose_favourites
 from preferences import edit_preferences, model_add_favourite_path, model_get_last_favourite_dir, model_get_last_favourites
 from choose_favourites import choose_favourite
@@ -57,6 +57,16 @@ def main(page: Page):
         # model_add_favourite_path(chosen_path)
         # print('chosen_path AFTER dir selection', chosen_path)
         # button_scan_clicked(None)
+
+    def button_scan_png_clicked(e):
+        lv.controls.clear()
+        lv.auto_scroll = False
+        lv.update()
+        png_files = list_png(txt1.value)
+        for line in png_files:
+            lv.controls.append(
+                Text(f"{line}", size=12, font_family="Consolas", selectable=True))
+        lv.update()
 
     def button_scan_clicked(e):
         global bad_txt_files, chosen_path
@@ -122,14 +132,17 @@ def main(page: Page):
         dd.options.append(dropdown.Option(fav))
 
     btnScan = FilledTonalButton(
-        "Scan", icon=icons.FIND_IN_PAGE, on_click=button_scan_clicked)
+        "List Orphan .txt", icon=icons.FIND_IN_PAGE, on_click=button_scan_clicked)
+    btnScanPng = FilledTonalButton(
+        "List .png", icon=icons.FIND_IN_PAGE, on_click=button_scan_png_clicked)
     row = Row(spacing=0, controls=[
               btnPick,
               btnPickFav,
               pr,
               txt1,
               # dd, # if want to display dropdown
-              btnScan
+              btnScan,
+              btnScanPng
               ],
               alignment="start")
     page.add(row)
