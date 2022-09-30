@@ -3,7 +3,7 @@ import os
 import flet
 from flet import ListView, Page, Text, TextField, FilledTonalButton, FilledButton, ElevatedButton, icons, colors, Row, ButtonStyle
 from flet import FilePicker, FilePickerResultEvent, padding, Container, ProgressRing, Column
-from flet import Page, KeyboardEvent, Dropdown, dropdown
+from flet import Page, KeyboardEvent, Dropdown, dropdown, Image
 from main import list_files, list_png, create_two_sets, find_missing_files, add_dir_root_and_txt_extension
 import preferences, choose_favourites
 from preferences import edit_preferences, model_add_favourite_path, model_get_last_favourite_dir, model_get_last_favourites
@@ -59,13 +59,27 @@ def main(page: Page):
         # button_scan_clicked(None)
 
     def button_scan_png_clicked(e):
+
+        def chose_png(e):
+            value = e.control.data  # easier communication with button handler via 'data' attribute
+            print('chose', value)
+            # display image of png in value in image control
+
         lv.controls.clear()
         lv.auto_scroll = False
         lv.update()
         png_files = list_png(txt1.value)
+        print('png_files', png_files)
         for line in png_files:
             lv.controls.append(
-                Text(f"{line}", size=12, font_family="Consolas", selectable=True))
+                # TextButton(f"{line}"))
+                ElevatedButton(
+                content=Row([Text(f"{line}")], alignment="start"),
+                width=100,
+                on_click=chose_png,
+                data=line  # easier communication with button handler
+                )
+            )
         lv.update()
 
     def button_scan_clicked(e):
@@ -172,7 +186,21 @@ def main(page: Page):
         return f"{num} orphaned text files"
 
     lv = ListView(expand=1, spacing=10, padding=20, auto_scroll=False)
+    img = Image(
+        # src=f"./examples/file2_5fbece75_RealESRGAN_x4plus.png",
+        src=f"/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples/file2_5fbece75_RealESRGAN_x4plus.png",
+        # width=100,
+        # height=100,
+        # fit="contain",
+        tooltip="Image",
+    )
+    page.add(img)
     page.add(lv)
+    # row = Row(spacing=0, controls=[
+    #         lv,
+    #         img,
+    #         ], alignment="center")
+    # page.add(row)
 
     btnDeleteOrphans = ElevatedButton(f"Delete Orphans", icon=icons.DELETE, on_click=buttonDelete_clicked, style=ButtonStyle(
         bgcolor={"focused": colors.RED_200, "": colors.RED_900},
