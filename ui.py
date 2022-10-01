@@ -1,5 +1,6 @@
 from time import sleep
 import os
+import random
 import flet
 from flet import ListView, Page, Text, TextField, FilledTonalButton, FilledButton, ElevatedButton, icons, colors, Row, ButtonStyle
 from flet import FilePicker, FilePickerResultEvent, padding, Container, ProgressRing, Column
@@ -15,11 +16,13 @@ from settings import model_get_initial_directory
 # these should probably be in the model
 bad_txt_files = []
 chosen_path = None  # user will override later
+img = None
 
 def main(page: Page):
     settings.page = page
 
     global chosen_path
+    global img
 
     page.title = "stable diffusion textfile cleaner"
     page.window_width = 1200
@@ -62,8 +65,16 @@ def main(page: Page):
 
         def chose_png(e):
             value = e.control.data  # easier communication with button handler via 'data' attribute
-            print('chose', value)
             # display image of png in value in image control
+            full_path = os.path.join(txt1.value, value)
+            print('chose', full_path)
+
+            # img.src = full_path # this doesn't work?  Probably a google drive issue - 
+            # no - it also happens with "/Volumes/Macbook/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples/file1_4fbece75_GFPGANv1.3_RealESRGAN_x4plus.png"
+            # ???
+            # img.src = f"https://picsum.photos/200/200?{random.randint(0, 1000)}"  # WOKS OK test images.  But not my own images
+            img.src = "/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples/file1_4fbece75_GFPGANv1.3_RealESRGAN_x4plus.png"
+            img.update()
 
         lv.controls.clear()
         lv.auto_scroll = False
@@ -186,21 +197,31 @@ def main(page: Page):
         return f"{num} orphaned text files"
 
     lv = ListView(expand=1, spacing=10, padding=20, auto_scroll=False)
-    img = Image(
-        # src=f"./examples/file2_5fbece75_RealESRGAN_x4plus.png",
-        src=f"/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples/file2_5fbece75_RealESRGAN_x4plus.png",
-        # width=100,
-        # height=100,
-        # fit="contain",
-        tooltip="Image",
+    # img = Image(
+    #     # src=f"./examples/file2_5fbece75_RealESRGAN_x4plus.png",
+    #     src=f"/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples/file2_5fbece75_RealESRGAN_x4plus.png",
+    #     # width=100,
+    #     # height=100,
+    #     # fit="contain",
+    #     tooltip="Image",
+    # )
+    i = random.randint(1, 1000)
+    img = Image( src=f"https://picsum.photos/200/200?{i}", width=500, height=500, )
+    # Must put the ListView in a Container with a size, otherwise listview will be 0 size and not seen
+    c1 = Container(
+        content=lv,
+        # bgcolor=colors.GREEN,
+        width=700,
+        height=500,
+        padding=5,
     )
-    page.add(img)
-    page.add(lv)
-    # row = Row(spacing=0, controls=[
-    #         lv,
-    #         img,
-    #         ], alignment="center")
-    # page.add(row)
+    # page.add(img)
+    # page.add(lv)
+    row = Row(spacing=0, controls=[
+            c1,
+            img,
+            ], alignment="center")
+    page.add(row)
 
     btnDeleteOrphans = ElevatedButton(f"Delete Orphans", icon=icons.DELETE, on_click=buttonDelete_clicked, style=ButtonStyle(
         bgcolor={"focused": colors.RED_200, "": colors.RED_900},
