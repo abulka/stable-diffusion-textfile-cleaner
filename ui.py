@@ -1,5 +1,6 @@
 from time import sleep
 import os
+import shutil
 import random
 import flet
 from flet import ListView, Page, Text, TextField, FilledTonalButton, FilledButton, ElevatedButton, icons, colors, Row, ButtonStyle
@@ -68,12 +69,24 @@ def main(page: Page):
             # display image of png in value in image control
             full_path = os.path.join(txt1.value, value)
             print('chose', full_path)
+            dst = "assets/preview.png"
+            shutil.copyfile(full_path, dst)
 
             # img.src = full_path # this doesn't work?  Probably a google drive issue - 
             # no - it also happens with "/Volumes/Macbook/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples/file1_4fbece75_GFPGANv1.3_RealESRGAN_x4plus.png"
             # ???
             # img.src = f"https://picsum.photos/200/200?{random.randint(0, 1000)}"  # WOKS OK test images.  But not my own images
-            img.src = "/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples/file1_4fbece75_GFPGANv1.3_RealESRGAN_x4plus.png"
+            # img.src = "/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples/file1_4fbece75_GFPGANv1.3_RealESRGAN_x4plus.png"
+            # img.src = "/3961482227_giant_lady_bug__cherries_in_field__by_Darrell_k_sweet_by_hieronymous_Bosch_-gigapixel-art-scale-4_00x.png"
+            # img.src = "/Users/andy/Library/Mobile Documents/com~apple~CloudDocs/iCloud Data/AI images created/naked princess hieronymous gen by mac m1 02-gigapixel-art-scale-4_00x.png"
+            # img.src = "/naked princess hieronymous gen by mac m1 02-gigapixel-art-scale-4_00x.png"
+            # img.src = "/4188317573_giant_lady_bug__cherries_in_field__by_Darrell_k_sweet_by_hieronymous_Bosch_-gigapixel-art-scale-4_00x.png"
+            # img.src = "/Users/andy/Library/Mobile Documents/com~apple~CloudDocs/iCloud Data/AI images created/119994449_giant_lady_bug__cherries_in_field__by_Darrell_k_sweet_.png"
+            # img.src = "/Users/andy/Library/Mobile Documents/com~apple~CloudDocs/iCloud Data/AI images created/naked princess hieronymous gen by mac m1-gigapixel-art-scale-4_00x.png"
+            # img.src = "/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples/2358228892_Fireworks_on_a_giant_mushroom___Oil_painting_intricate_detail__by_Dean_Cornwell_and_Hieronymous_Bosch_and_Matisse_-art-scale-4_00x-gigapixel.png"
+            img.src = "assets/3961482227_giant_lady_bug__cherries_in_field__by_Darrell_k_sweet_by_hieronymous_Bosch_-gigapixel-art-scale-4_00x.png"
+            img.update()
+            img.src = "assets/preview.png"
             img.update()
 
         lv.controls.clear()
@@ -251,6 +264,7 @@ def main(page: Page):
     # choose_favourites.set_page(page)
 
 
-flet.app(target=main)
+flet.app(target=main, assets_dir="assets")
+# flet.app(target=main)
 # flet.app(target=main, view=flet.WEB_BROWSER)
 
