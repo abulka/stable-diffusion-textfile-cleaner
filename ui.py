@@ -13,6 +13,9 @@ from choose_favourites import choose_favourite
 import settings
 from settings import model_get_initial_directory
 # import smokesignal
+# import logging
+
+# logging.basicConfig(level=logging.DEBUG)
 
 # these should probably be in the model
 bad_txt_files = []
@@ -87,7 +90,8 @@ def main(page: Page):
             # img.src = "file:///Volumes/SSD/Data/Devel/stable-diffusion-textfile-cleaner/assets/preview.png?{random.randint(0, 1000)}"
             # img.src = "file:///preview.png?{random.randint(0, 1000)}"
             # img.update()
-            img.src = "assets/preview.png"
+            # img.src = "assets/preview.png"
+            img.src = f"http://127.0.0.1:5009/assets/preview.png?{random.randint(0, 1000)}"
             img.update()
 
         lv.controls.clear()
@@ -270,7 +274,7 @@ def main(page: Page):
     # choose_favourites.set_page(page)
 
 
-flet.app(target=main, assets_dir="assets")
+flet.app(target=main, assets_dir="assets", port=5009)
 # flet.app(target=main)
 # flet.app(target=main, view=flet.WEB_BROWSER)
 
