@@ -9,9 +9,10 @@
     "/Users/andy/Google Drive/My Drive/AI/pics/2022-09-10 09435422",
     "/Users/andy/Google Drive/My Drive/AI/pics/2022-09-15 e570a3fa red cherries 200",
     "/Users/andy/Google Drive/My Drive/AI/pics/2022-09-13 waves cherry and namojiro",
-    "/Volumes/Macbook/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples"
+    "/Volumes/Macbook/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples",
+    "/Volumes/SSD/Data/Devel/stable-diffusion-textfile-cleaner/examples"
   ],
   "actually_delete": false,
   "other": "other stuff",
-  "initial_directory": "/Volumes/Macbook/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples"
+  "initial_directory": "/Volumes/SSD/Data/Devel/stable-diffusion-textfile-cleaner/examples"
 }

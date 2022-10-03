@@ -24,7 +24,9 @@ def model_add_favourite_path(path):
     model = get_model()
     if path not in model['favourite_directories']:
         model['favourite_directories'].append(path)
-    save_model(model)
+        # TODO when running in hot reload it causes app to reload and lose current dir cos we 
+        # are not saving and retrieving the current dir properly
+    # save_model(model)
 
 def model_get_last_favourite_dir():
     model = get_model()

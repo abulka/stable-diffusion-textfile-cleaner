@@ -12,14 +12,15 @@ def list_files(directory):
 
 def list_png(directory):
     files = []
+    
+    # check if directory exists
+    if not os.path.exists(directory):
+        print(f'ERROR: directory {directory} does not exist')
+        return []
+
     # list all .png files
     for file in os.listdir(directory):
         if file.endswith('.png'):
-            files.append(file)
-    return files
-
-    for file in os.listdir(directory):
-        if os.path.isfile(os.path.join(directory, file)):
             files.append(file)
     return files
 

@@ -54,7 +54,7 @@ def main(page: Page):
         if '/Volumes/Google Drive/' in chosen_path:
             chosen_path = chosen_path.replace(
                 '/Volumes/Google Drive/', f"{os.path.expanduser('~')}/Google Drive/")
-        listener_chose_dir({'path': chosen_path,
+        listener_chose_dir('some topic', {'path': chosen_path,
                                  'news': 'Sold for $1M'})
         # txt1.value = chosen_path
         # txt1.update()
@@ -84,9 +84,10 @@ def main(page: Page):
             # img.src = "/Users/andy/Library/Mobile Documents/com~apple~CloudDocs/iCloud Data/AI images created/119994449_giant_lady_bug__cherries_in_field__by_Darrell_k_sweet_.png"
             # img.src = "/Users/andy/Library/Mobile Documents/com~apple~CloudDocs/iCloud Data/AI images created/naked princess hieronymous gen by mac m1-gigapixel-art-scale-4_00x.png"
             # img.src = "/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples/2358228892_Fireworks_on_a_giant_mushroom___Oil_painting_intricate_detail__by_Dean_Cornwell_and_Hieronymous_Bosch_and_Matisse_-art-scale-4_00x-gigapixel.png"
-            img.src = "assets/3961482227_giant_lady_bug__cherries_in_field__by_Darrell_k_sweet_by_hieronymous_Bosch_-gigapixel-art-scale-4_00x.png"
-            img.update()
-            img.src = "assets/preview.png"
+            # img.src = "3961482227_giant_lady_bug__cherries_in_field__by_Darrell_k_sweet_by_hieronymous_Bosch_-gigapixel-art-scale-4_00x.png"
+            img.src = "file:///Volumes/SSD/Data/Devel/stable-diffusion-textfile-cleaner/assets/preview.png?{random.randint(0, 1000)}"
+            # img.update()
+            # img.src = "assets/preview.png"
             img.update()
 
         lv.controls.clear()
@@ -112,7 +113,12 @@ def main(page: Page):
         lv.controls.clear()
         lv.auto_scroll = False
         lv.update()
-        result = list_files(txt1.value)
+        directory = txt1.value
+        # check if directory exists
+        if not os.path.isdir(directory):
+            print(f"directory {directory} does not exist")
+            return
+        result = list_files(directory)
         set1_txt, set2_png = create_two_sets(result)
         print('text files', set1_txt)
         print('png files', set2_png)
