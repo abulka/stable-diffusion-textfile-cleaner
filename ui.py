@@ -72,9 +72,8 @@ def main(page: Page):
             dst = "assets/preview.png"
             shutil.copyfile(full_path, dst)
 
-            # img.src = full_path # this doesn't work?  Probably a google drive issue - 
-            # no - it also happens with "/Volumes/Macbook/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples/file1_4fbece75_GFPGANv1.3_RealESRGAN_x4plus.png"
-            # ???
+            # img.src = full_path # this doesn't work?  https://github.com/flet-dev/flet/issues/340 
+            # 
             # img.src = f"https://picsum.photos/200/200?{random.randint(0, 1000)}"  # WOKS OK test images.  But not my own images
             # img.src = "/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples/file1_4fbece75_GFPGANv1.3_RealESRGAN_x4plus.png"
             # img.src = "/3961482227_giant_lady_bug__cherries_in_field__by_Darrell_k_sweet_by_hieronymous_Bosch_-gigapixel-art-scale-4_00x.png"
@@ -85,9 +84,10 @@ def main(page: Page):
             # img.src = "/Users/andy/Library/Mobile Documents/com~apple~CloudDocs/iCloud Data/AI images created/naked princess hieronymous gen by mac m1-gigapixel-art-scale-4_00x.png"
             # img.src = "/Users/andy/Devel/stable-diffusion-textfile-cleaner/examples/2358228892_Fireworks_on_a_giant_mushroom___Oil_painting_intricate_detail__by_Dean_Cornwell_and_Hieronymous_Bosch_and_Matisse_-art-scale-4_00x-gigapixel.png"
             # img.src = "3961482227_giant_lady_bug__cherries_in_field__by_Darrell_k_sweet_by_hieronymous_Bosch_-gigapixel-art-scale-4_00x.png"
-            img.src = "file:///Volumes/SSD/Data/Devel/stable-diffusion-textfile-cleaner/assets/preview.png?{random.randint(0, 1000)}"
+            # img.src = "file:///Volumes/SSD/Data/Devel/stable-diffusion-textfile-cleaner/assets/preview.png?{random.randint(0, 1000)}"
+            # img.src = "file:///preview.png?{random.randint(0, 1000)}"
             # img.update()
-            # img.src = "assets/preview.png"
+            img.src = "assets/preview.png"
             img.update()
 
         lv.controls.clear()
